@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
 
 
-        int numWords = 5;
+        int numWords = 45_000;
 
         File file = new File("undictionary.txt");
         Scanner reader = new Scanner(file);
@@ -28,7 +28,7 @@ public class Main {
 
         }
 
-        int increment = numWords; //Can change to 5k late on //Can also come from command line
+        int increment = 5000; //Can change to 5k late on //Can also come from command line
         final int max = numWords; //Max int array size
 
         //Bubble Sort
@@ -52,12 +52,13 @@ public class Main {
             //Initial Array for testing Merge sort
             //printArray(words, index, size);
 
-            int[] mergersorter = mergerSort(words, index, 0, size-1);
+            //Not Working
+            //int[] mergersorter = mergerSort(words, index, 0, size-1);
 
 
 
            // System.out.println("\nSorted List");
-            //printArray(words, index, size);
+            printArray(words, index, size);
 
             //Stop Timer
             double stopTime = System.nanoTime();
