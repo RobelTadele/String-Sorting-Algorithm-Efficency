@@ -9,6 +9,7 @@ package com.Robel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.Scanner;
 
 public class Main {
@@ -16,7 +17,7 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
 
 
-        int numWords = 5;
+        int numWords = 45_000;
 
         File file = new File("undictionary.txt");
         Scanner reader = new Scanner(file);
@@ -28,7 +29,7 @@ public class Main {
 
         }
 
-        int increment = numWords; //Can change to 5k late on //Can also come from command line
+        int increment = 5000; //Can change to 5k late on //Can also come from command line
         final int max = numWords; //Max int array size
 
         //Bubble Sort
@@ -38,9 +39,10 @@ public class Main {
             //Start Timer
             double startTime = System.nanoTime();
 
+            //Uncomment array down below to see time elapsed to sort
             /////Sorting Algorithms///////////////
-            //Different Sorting Algorithms
-            //int[] bubbleSorter = bubbleSort(words, index);
+
+            int[] bubbleSorter = bubbleSort(words, index);
             //int[] selectionSorter = selectionSort(words,index);
 
             //int[] insertionSorter = insertionSort(words, index);
@@ -52,22 +54,21 @@ public class Main {
             //Initial Array for testing Merge sort
             //printArray(words, index, size);
 
-            int[] mergersorter = mergerSort(words, index, 0, size-1);
+            //sort(words, index);
 
 
 
-           // System.out.println("\nSorted List");
-            //printArray(words, index, size);
+
 
             //Stop Timer
             double stopTime = System.nanoTime();
 
             //Elapsed Time
             double totalTime = (stopTime - startTime)/ 1_000_000_000;
-            //System.out.println(totalTime);
+            System.out.println(totalTime);
 
             //Prints sorted words
-            printList(words, index);
+            //printList(words, index);
             //System.out.println();
         }
     }//End of Main
@@ -222,63 +223,47 @@ public class Main {
 
     //Main merge Sorter
 
-    private static void merge (String[] words, int[] index, int left,int middle ,int right)
-    {
-        int n1 = middle - left +1;
-        int n2 = right - middle;
+   private static void merge(String[] words, int[] output, int[] left, int[] right) {
+       int i = 0, j = 0, k = 0;
 
-        int[] tempArrayL = new int[n1];
-        int[] tempArrayR= new int[n2];
+       while (i < left.length && j < right.length) {
+           if (words[left[i]].compareTo(words[right[j]]) < 0) {
+               words[output[k++]] = words[left[k++]];
+           } else {
+               words[output[k++]] = words[right[j++]];
+           }
+       }
 
-        for (int i = 0; i < n1; ++i) {
-            tempArrayL[i] = index[left + i];
+
+       while (i < left.length) {
+           words[output[k++]] = words[left[i++]];
+       }
+
+       while (j < right.length) {
+           words[output[k++]] = words[right[j++]];
+       }
+   }
+
+        public static void sort (String[] words, int[] index){
+
+        if(index.length > 1){
+            int halfSize = index.length / 2;
+            int[] leftTable = new int[halfSize];
+            int[] rightTabel = new int[halfSize];
+
+            System.arraycopy(index, 0, leftTable, 0, halfSize);
+            System.arraycopy(index, halfSize,rightTabel, 0, index.length - halfSize);
+
+            sort(words, leftTable);
+            sort(words, rightTabel);
+
         }
+       }
 
-        for (int i = 0; i < n2; ++i) {
-            tempArrayR[i] = index[middle + 1 + i];
-        }
 
-        int i =0;
-        int j =0;
-        int k = 1;
 
-        while (i < n1 && j < n2){
-            if(tempArrayL[i] <= tempArrayR[j]){
-                index[k] = tempArrayL[i];
-                i++;
-            }else{
-                index[k] = tempArrayR[j];
-                j++;
-            }
-            k++;
-        }
 
-        while(i < n1){
-            index[k] = tempArrayL[i];
-            i++;
-            k++;
-        }
 
-        while (j < n2) {
-            index[k] = tempArrayR[j];
-            j++;
-            k++;
-        }
-    }
-
-    public static int[] mergerSort(String[] words, int[] index, int left, int right){
-        if(left < right){
-
-            int middle = (1 + right) / 2;
-
-            mergerSort(words, index, left, middle);
-            mergerSort(words, index, middle+1, right);
-
-            merge(words, index, left, middle, right);
-        }
-        return index;
-
-    }
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
