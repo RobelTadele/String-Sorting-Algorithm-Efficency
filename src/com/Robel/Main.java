@@ -19,12 +19,12 @@ public class Main {
         Scanner reader = new Scanner(file);
 
 
-        final int max = 45_000; //Max int array size make 45_000
-        int increment = 5000; //Can change to 5k late on //Can also come from command line
+        final int max = 5; //Max int array size make 45_000
+        int increment = 1; //Can change to 5k late on //Can also come from command line
 
 
 
-        String[] words = new String[max + 1];
+        String[] words = new String[max ];
 
         for (int i = 0; i < max; i++) {
             words[i] = reader.next();
@@ -40,7 +40,7 @@ public class Main {
             double startTime = System.nanoTime();
 
 
-            /////Sorting Algorithms///////////////
+            /////Working Sorting Algorithms///////////////
 
             //int[] bubbleSorter = bubbleSort(words, index);
             //int[] selectionSorter = selectionSort(words,index);
@@ -49,13 +49,14 @@ public class Main {
             //int[] heapSorter = heapSort(words, index);
             //int[] shellSorter = shellSort(words, index);
 
+
             //Main Printer
             //printArray(words, array, size);
 
             //System.out.println(words[index[size]]);
 
-            //QuickSort(words, index, 0, index.length-1);
-             mergeSort(words, index);
+            QuickSort(words, index, 0, index.length-1);
+            //mergeSort(words, index);
 
             //Printer for Merge and Quick Sort
             System.out.println(words[index[size]]);
@@ -67,7 +68,7 @@ public class Main {
             //System.out.println(totalTime);
 
             //Prints sorted words
-            printList(words, index);
+            //printList(words, index);
             //System.out.println();
         }
 
@@ -119,38 +120,26 @@ public class Main {
     }
     //Merge Sort End
 
-
-    //Quick Sort
-    private static void QuickSort(String[] words, int[] arr, int left, int right){
-        int index = partition(words, arr, left, right);
-
-        if(left < index -1)
-            QuickSort(words, arr, left, index-1);
-        if(index < right)
-            QuickSort(words, arr, index, right);
-
-    }
-    private static int partition(String[] words,int[] arr, int left, int right){
-        int pivot = arr[(left + right) / 2];
-        while(left <= right){
-            while(arr[left] < pivot)
-                left++;
-            while(arr[right] > pivot)
-                right--;
-
-            if(left <= right){
-                int temp = arr[left];
-                arr[left] = arr[right];
-                arr[right] = temp;
-
-                left++;
-                right--;
-            }//End of If
-        }
-
-        return left;
-    }
     //Quick Sort Partition
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public static void printArray(String[] words, int[] index, int size) {
         for (int i = 0; i < size; i++) {
