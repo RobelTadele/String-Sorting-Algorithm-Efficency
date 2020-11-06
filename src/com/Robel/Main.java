@@ -15,47 +15,53 @@ public class Main {
 
     public static void main(String[] args) throws FileNotFoundException {
 
-
-        int numWords = 45_000;
-
         File file = new File("undictionary.txt");
         Scanner reader = new Scanner(file);
 
-        String[] words = new String[numWords];
 
-        for (int i = 0; i < numWords; i++) {
+        final int max = 10; //Max int array size make 45_000
+        int increment = 1; //Can change to 5k late on //Can also come from command line
+
+
+
+        String[] words = new String[max + 1];
+
+        for (int i = 0; i < max; i++) {
             words[i] = reader.next();
-
+            //System.out.println(words[i]);
         }
 
-        int increment = 5000; //Can change to 5k late on //Can also come from command line
-        final int max = numWords; //Max int array size
-
+        int[] index = new int[]{0,9,8,7,6,5,4,3,2,1};
         //Bubble Sort
-        for (int size = 0;size <= max ; size += increment) {
-            int[] index = getNewNums(size);
+        for (int size = 0;size < max ; size += increment) {
+            //int[] index = getNewNums(size + 1);
 
             //Start Timer
             double startTime = System.nanoTime();
 
-            //Uncomment array down below to see time elapsed to sort
+
             /////Sorting Algorithms///////////////
 
-            int[] bubbleSorter = bubbleSort(words, index);
+            //int[] bubbleSorter = bubbleSort(words, index);
             //int[] selectionSorter = selectionSort(words,index);
 
             //int[] insertionSorter = insertionSort(words, index);
             //int[] heapSorter = heapSort(words, index);
             //int[] shellSorter = shellSort(words, index);
 
+
             ///////////////////////////////
 
-            //Initial Array for testing Merge sort
-            //printArray(words, index, size);
+            //Main Printer
+            //printArray(words, array, size);
 
-            //sort(words, index);
+            //System.out.println(words[index[size]]);
 
+            //QuickSort(words, index, 0, index.length-1);
+             mergeSort(words, index, 0, index.length - 1);
 
+            //Printer for Merge and Quick Sort
+            System.out.println(words[index[size]]);
 
 
 
@@ -64,13 +70,102 @@ public class Main {
 
             //Elapsed Time
             double totalTime = (stopTime - startTime)/ 1_000_000_000;
-            System.out.println(totalTime);
+            //System.out.println(totalTime);
 
             //Prints sorted words
             //printList(words, index);
             //System.out.println();
         }
+
+        /*for (int i = 0; i < index.length; i++) {
+            System.out.println(index[i]);
+        }*/
+
+
     }//End of Main
+
+
+    //Merge Sort
+    public static void mergeSort(String[] words, int[] arr, int l, int r){
+        if(l > 1){
+            int m = (1 + r) / 2;
+            mergeSort(words, arr, l, m);
+            mergeSort(words, arr, m+1, r);
+            merge(words, l, m, r);
+
+        }
+    }
+
+    private static void merge(String[] wordsMain, int l, int m, int r) {
+        int n1 = r - l + 1;
+        String[] words = new String[n1];
+        int i1 = r;
+        int i2 = m + 1;
+        int j = 0;
+
+
+        while (i1 <= m && i2 <= r) {
+            if (wordsMain[i1].compareTo(words[i2]) < 0) {
+                words[j] = wordsMain[i1];
+                i1++;
+            } else {
+                words[j] = wordsMain[i2];
+                i2++;
+            }
+            j++;
+        }
+        while (i1 <= m) {
+            words[j] = wordsMain[i1];
+            i1++;
+            j++;
+        }
+
+        while (i2 <= r) {
+            words[j] = wordsMain[i2];
+            i2++;
+            j++;
+        }
+
+        // copy back from the temporary array
+        for (j = 0; j < n1; j++) {
+            wordsMain[l + j] = words[j];
+
+        }
+    }
+    //Merge Sort End
+
+
+    //Quick Sort
+    private static void QuickSort(String[] words, int[] arr, int left, int right){
+        int index = partition(words, arr, left, right);
+
+        if(left < index -1)
+            QuickSort(words, arr, left, index-1);
+        if(index < right)
+            QuickSort(words, arr, index, right);
+
+    }
+    private static int partition(String[] words,int[] arr, int left, int right){
+        int pivot = arr[(left + right) / 2];
+        while(left <= right){
+            while(arr[left] < pivot)
+                left++;
+            while(arr[right] > pivot)
+                right--;
+
+            if(left <= right){
+                int temp = arr[left];
+                arr[left] = arr[right];
+                arr[right] = temp;
+
+                left++;
+                right--;
+            }//End of If
+        }
+
+        return left;
+    }
+    //Quick Sort Partition
 
     public static void printArray(String[] words, int[] index, int size) {
         for (int i = 0; i < size; i++) {
@@ -221,49 +316,6 @@ public class Main {
     }//End of Heaper Method
 
     //Main merge Sorter
-
-   private static void merge(String[] words, int[] output, int[] left, int[] right) {
-       int i = 0, j = 0, k = 0;
-
-       while (i < left.length && j < right.length) {
-           if (words[left[i]].compareTo(words[right[j]]) < 0) {
-               words[output[k++]] = words[left[k++]];
-           } else {
-               words[output[k++]] = words[right[j++]];
-           }
-       }
-
-
-       while (i < left.length) {
-           words[output[k++]] = words[left[i++]];
-       }
-
-       while (j < right.length) {
-           words[output[k++]] = words[right[j++]];
-       }
-   }
-
-        public static void sort (String[] words, int[] index){
-
-        if(index.length > 1){
-            int halfSize = index.length / 2;
-            int[] leftTable = new int[halfSize];
-            int[] rightTabel = new int[halfSize];
-
-            System.arraycopy(index, 0, leftTable, 0, halfSize);
-            System.arraycopy(index, halfSize,rightTabel, 0, index.length - halfSize);
-
-            sort(words, leftTable);
-            sort(words, rightTabel);
-
-        }
-       }
-
-
-
-
-
-
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Resets array in between the sorts
