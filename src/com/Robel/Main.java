@@ -19,8 +19,8 @@ public class Main {
         Scanner reader = new Scanner(file);
 
 
-        final int max = 5; //Max int array size make 45_000
-        int increment = 1; //Can change to 5k late on //Can also come from command line
+        final int max = 45_000; //Max int array size make 45_000
+        int increment = 5000; //Can change to 5k late on //Can also come from command line
 
 
 
@@ -33,13 +33,13 @@ public class Main {
 
         //int[] index = new int[]{0,1,2,3,4,5,6,7,8,9};
         //Bubble Sort
-        for (int size = 0;size < max ; size += increment) {
+        for (int size = 5000;size <= max ; size += increment) {
             int[] index = getNewNums(max);
 
             //Start Timer
+
+
             double startTime = System.nanoTime();
-
-
             /////Working Sorting Algorithms///////////////
 
             //int[] bubbleSorter = bubbleSort(words, index);
@@ -55,17 +55,22 @@ public class Main {
 
             //System.out.println(words[index[size]]);
 
-            QuickSort(words, index, 0, index.length-1);
-            //mergeSort(words, index);
+            //Make sure to uncomment/ comment one before starting another sort
+
+
+            //QuickSort(words, index, 0, index.length-1);
+            mergeSort(words, index);
+            double stopTime = System.nanoTime();
+
 
             //Printer for Merge and Quick Sort
-            System.out.println(words[index[size]]);
+            //System.out.println(words[index[size]]);
 
 
             //Stop Timer
-            double stopTime = System.nanoTime();
+
             double totalTime = (stopTime - startTime)/ 1_000_000_000;
-            //System.out.println(totalTime);
+            System.out.println(totalTime);
 
             //Prints sorted words
             //printList(words, index);
@@ -78,7 +83,6 @@ public class Main {
 
 
     }//End of Main
-
 
     //Merge Sort
     public static void mergeSort(String[] words, int[] arr){
@@ -122,23 +126,70 @@ public class Main {
 
     //Quick Sort Partition
 
+    private static void QuickSort(String[] words, int[] index, int first, int last) {
+
+        if (first < last) {
+            int pivIndex = partition(words, index, first, last);
+            QuickSort(words, index, first, pivIndex - 1);
+            QuickSort(words, index, pivIndex + 1, last);
+        }
+    }
+
+    public static int partition(String[] words, int[] array, int first, int last){
+        sort3(words, array, first, last);
+        swap(words, array, first, (first + last)/2);
+
+        String pivot = words[array[first]];
+        int up = first;
+        int down = last;
+
+
+        do {
+
+            while ((up < last) && (pivot.compareTo(words[array[up]]) >= 0)) {
+                up++;
+            }
+
+            while (pivot.compareTo(words[array[down]]) < 0) {
+                down = down - 1;
+            }
+
+            if (up < down) {
+
+                swap(words, array, up, down);
+            }
+
+        } while (up < down);
+
+        swap(words, array, first, down);
+        return down;
+    }
 
 
 
 
 
+    private static void swap(String[] words, int[] array, int i, int j) {
+        String temp = words[array[i]];
+        words[array[i]] = words[array[j]];
+        words[array[j]] = temp;
+    }
 
+    private static void sort3(String[] words, int[] array, int first, int last) {
+        int middle = (first + last) / 2;
 
+        if(words[array[middle]].compareTo(words[array[first]]) < 0){
+            swap(words,array,first,middle);
+        }
 
+        if(words[array[last]].compareTo(words[array[middle]]) < 0){
+            swap(words, array, middle, last);
+        }
 
-
-
-
-
-
-
-
-
+        if(words[array[middle]].compareTo(words[array[first]]) < 0){
+            swap(words, array, first, middle);
+        }
+    }
 
 
     public static void printArray(String[] words, int[] index, int size) {
