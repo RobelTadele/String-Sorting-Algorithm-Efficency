@@ -19,8 +19,8 @@ public class Main {
         Scanner reader = new Scanner(file);
 
 
-        final int max = 10; //Max int array size make 45_000
-        int increment = 1; //Can change to 5k late on //Can also come from command line
+        final int max = 45_000; //Max int array size make 45_000
+        int increment = 5000; //Can change to 5k late on //Can also come from command line
 
 
 
@@ -31,10 +31,10 @@ public class Main {
             //System.out.println(words[i]);
         }
 
-        int[] index = new int[]{0,9,8,7,6,5,4,3,2,1};
+        //int[] index = new int[]{0,1,2,3,4,5,6,7,8,9};
         //Bubble Sort
         for (int size = 0;size < max ; size += increment) {
-            //int[] index = getNewNums(size + 1);
+            int[] index = getNewNums(max);
 
             //Start Timer
             double startTime = System.nanoTime();
@@ -49,31 +49,25 @@ public class Main {
             //int[] heapSorter = heapSort(words, index);
             //int[] shellSorter = shellSort(words, index);
 
-
-            ///////////////////////////////
-
             //Main Printer
             //printArray(words, array, size);
 
             //System.out.println(words[index[size]]);
 
             //QuickSort(words, index, 0, index.length-1);
-             mergeSort(words, index, 0, index.length - 1);
+             mergeSort(words, index);
 
             //Printer for Merge and Quick Sort
             System.out.println(words[index[size]]);
 
 
-
             //Stop Timer
             double stopTime = System.nanoTime();
-
-            //Elapsed Time
             double totalTime = (stopTime - startTime)/ 1_000_000_000;
             //System.out.println(totalTime);
 
             //Prints sorted words
-            //printList(words, index);
+            printList(words, index);
             //System.out.println();
         }
 
@@ -86,50 +80,41 @@ public class Main {
 
 
     //Merge Sort
-    public static void mergeSort(String[] words, int[] arr, int l, int r){
-        if(l > 1){
-            int m = (1 + r) / 2;
-            mergeSort(words, arr, l, m);
-            mergeSort(words, arr, m+1, r);
-            merge(words, l, m, r);
+    public static void mergeSort(String[] words, int[] arr){
+
+        if(arr.length > 1) {
+            int halfSize = arr.length / 2;
+            int[] left = new int[halfSize];
+            int[] right = new int[arr.length - halfSize];
+
+            System.arraycopy(arr, 0, left, 0, halfSize);
+            System.arraycopy(arr, halfSize, right, 0, arr.length - halfSize);
+
+            mergeSort(words, left);
+            mergeSort(words, right);
+
+            merge(words, arr, left, right);
 
         }
     }
 
-    private static void merge(String[] wordsMain, int l, int m, int r) {
-        int n1 = r - l + 1;
-        String[] words = new String[n1];
-        int i1 = r;
-        int i2 = m + 1;
-        int j = 0;
+    private static void merge(String[] words, int[] output, int[] left, int[] right) {
+        int i = 0, j = 0, k = 0;
 
-
-        while (i1 <= m && i2 <= r) {
-            if (wordsMain[i1].compareTo(words[i2]) < 0) {
-                words[j] = wordsMain[i1];
-                i1++;
-            } else {
-                words[j] = wordsMain[i2];
-                i2++;
+        while(i < left.length && j < right.length ){
+            if(words[left[i]].compareTo(words[right[j]]) < 0){
+                output[k++] = left[i++];
+            }else{
+                output[k++] = right[j++];
             }
-            j++;
-        }
-        while (i1 <= m) {
-            words[j] = wordsMain[i1];
-            i1++;
-            j++;
         }
 
-        while (i2 <= r) {
-            words[j] = wordsMain[i2];
-            i2++;
-            j++;
+        while(i < left.length){
+            output[k++] = left[i++];
         }
 
-        // copy back from the temporary array
-        for (j = 0; j < n1; j++) {
-            wordsMain[l + j] = words[j];
-
+        while(j < right.length){
+            output[k++] = right[j++];
         }
     }
     //Merge Sort End
